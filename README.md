@@ -18,27 +18,29 @@
 |PRINT|演算レジスタの内容を印刷する|
 
 ## 使い方
-### コンパイル
+### クローンとコンパイル
 
-```
-$ make
+ターミナル上で、
+```bash
+cd && git clone https://github.com/greenlaver/tinyCPU.git && \
+cd ~/tinyCPU && make
 ```
 とすれば、エミュレータ本体のプログラム`tinyCPU`が生成されます。
 
 ### プログラム実行
 同梱しているアセンブリ言語が記述された`ASM`ファイルを実行する場合、
-```
-$ ./tinyCPU ASM
+```bash
+./tinyCPU ASM
 ```
 とすれば
-```
+```console
 $ ./tinyCPU ASM
-[AriReg] : 10300.000000
-[AriReg] : 10609.000000
-[AriReg] : 10927.270000
+[PRINT] : 10300.000000
+[PRINT] : 10609.000000
+[PRINT] : 10927.270000
 ...
-[AriReg] : 186588.660003
-[AriReg] : 192186.319803
+[PRINT] : 186588.660003
+[PRINT] : 192186.319803
 [HALT]
 ```
 のように実行結果が得られます。

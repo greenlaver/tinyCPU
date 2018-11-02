@@ -234,5 +234,5 @@ void jumpzero(int address) {
 }
 
 void print() {
-    printf("[AriReg] : %f\n", ariReg);
+    printf("[PRINT] : %f\n", ariReg);
 }
