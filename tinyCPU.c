@@ -46,49 +46,43 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
-        if(strcmp(ptr, "ADD") == 0) {
-            ptr = strtok(NULL, SEP_CHAR);
-            add(atof(ptr));
-        }
-        else if(strcmp(ptr, "SUBTRACT") == 0) {
-            ptr = strtok(NULL, SEP_CHAR);
-            subtract(atof(ptr));
-        }
-        else if(strcmp(ptr, "MULTIPLY") == 0) {
-            ptr = strtok(NULL, SEP_CHAR);
-            multiply(atof(ptr));
-        }
-        else if(strcmp(ptr, "DIVIDE") == 0) {
-            ptr = strtok(NULL, SEP_CHAR);
-            divide(atof(ptr));
-        }
-        else if(strcmp(ptr, "LOAD") == 0) {
-            ptr = strtok(NULL, SEP_CHAR);
-            load(atof(ptr));
-        }
-        else if(strcmp(ptr, "STORE") == 0) {
-            ptr = strtok(NULL, SEP_CHAR);
-            store(atof(ptr));
-        }
-        else if(strcmp(ptr, "JUMP") == 0) {
-            ptr = strtok(NULL, SEP_CHAR);
-            jump(atof(ptr));
-        }
-        else if(strcmp(ptr, "JUMPZERO") == 0) {
-            ptr = strtok(NULL, SEP_CHAR);
-            jumpzero(atof(ptr));
-        }
-        else if(strcmp(ptr, "PRINT") == 0) {
-            ptr = strtok(NULL, SEP_CHAR);
-            print();
-        }
-        else if(strcmp(ptr, "HALT") == 0) {
-            printf("[HALT]\n");
-            break;
-        }
-        else {
-            printf("Illegal opcode : %s\n", ptr);
-            break;
+        // Get OPCODE from code string
+        OPCODE opcode_buf = convertStrToOpcode(ptr);
+        ptr = strtok(NULL, SEP_CHAR);
+
+        switch(opcode_buf) {
+            case ADD:
+                add(atof(ptr));
+                break;
+            case SUBTRACT:
+                subtract(atof(ptr));
+                break;
+            case MULTIPLY:
+                multiply(atof(ptr));
+                break;
+            case DIVIDE:
+                divide(atof(ptr));
+                break;
+            case LOAD:
+                load(atof(ptr));
+                break;
+            case STORE:
+                store(atof(ptr));
+                break;
+            case JUMP:
+                jump(atof(ptr));
+                break;
+            case JUMPZERO:
+                jumpzero(atof(ptr));
+                break;
+            case PRINT:
+                print();
+                break;
+            case HALT:
+                printf("[HALT]\n");
+                return 0;
+            default:
+                return -1;
         }
 
         // Increment Program Counter
@@ -131,6 +125,43 @@ int readCode(char *filePath) {
     fclose(fp);
 
     return 0;
+}
+
+OPCODE convertStrToOpcode(char *code) {
+    if(strcmp(code, "ADD") == 0) {
+        return ADD;
+    }
+    else if(strcmp(code, "SUBTRACT") == 0) {
+        return SUBTRACT;
+    }
+    else if(strcmp(code, "MULTIPLY") == 0) {
+        return MULTIPLY;
+    }
+    else if(strcmp(code, "DIVIDE") == 0) {
+        return DIVIDE;
+    }
+    else if(strcmp(code, "LOAD") == 0) {
+        return LOAD;
+    }
+    else if(strcmp(code, "STORE") == 0) {
+        return STORE;
+    }
+    else if(strcmp(code, "JUMP") == 0) {
+        return JUMP;
+    }
+    else if(strcmp(code, "JUMPZERO") == 0) {
+        return JUMPZERO;
+    }
+    else if(strcmp(code, "PRINT") == 0) {
+        return PRINT;
+    }
+    else if(strcmp(code, "HALT") == 0) {
+        return HALT;
+    }
+    else {
+        printf("[Error] Illegal opcode : %s\n", code);
+        return ILLEGAL_OPCODE;
+    }
 }
 
 void add(int address) {

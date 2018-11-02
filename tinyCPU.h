@@ -5,8 +5,24 @@
 // 区切り文字
 #define SEP_CHAR    " "
 
+typedef enum {
+    ADD,
+    SUBTRACT,
+    MULTIPLY,
+    DIVIDE,
+    LOAD,
+    STORE,
+    JUMP,
+    JUMPZERO,
+    PRINT,
+    HALT,
+    ILLEGAL_OPCODE
+} OPCODE;
+
 // Function Prototype
 int readCode(char *path);
+OPCODE convertStrToOpcode(char *code);
+
 void add(int address);
 void subtract(int address);
 void multiply(int address);
