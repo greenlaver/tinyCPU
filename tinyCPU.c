@@ -3,8 +3,9 @@
 #include <string.h>
 #include "tinyCPU.h"
 
-// プログラムカウンタ
-int pc;
+#define RES_HALT    1
+#define RES_INVALID -1
+
 // 演算結果を格納するレジスタ (Arithmetic Register)
 double ariReg;
 
@@ -15,8 +16,8 @@ typedef struct code {
 CODE src[MAX_LINE];
 
 int main(int argc, char *argv[]) {
-    // strtok用のバッファ
-    char buffer[MAX_LENGTH];
+    // Program Counter
+    int pc = 0;
 
     // 引数1つでなければ終了
     if(argc != 2) {
@@ -32,62 +33,77 @@ int main(int argc, char *argv[]) {
     }
 
     /* == 以下処理系 == */
+    int res;
 
-    // Reset Program Counter
-    pc = 0;
-    
     while(1) {
-        strcpy(buffer, src[pc].str);
-        char *ptr = strtok(buffer, SEP_CHAR);
+        res = executeLine(&pc);
 
-        // Skip Blank Line
-        if(ptr == NULL) {
-            pc++;
-            continue;
+        if(res == RES_HALT) {
+            printf("[HALT]\n");
+            break;
         }
-
-        // Get OPCODE from code string
-        OPCODE opcode_buf = convertStrToOpcode(ptr);
-        ptr = strtok(NULL, SEP_CHAR);
-
-        switch(opcode_buf) {
-            case ADD:
-                add(atof(ptr));
-                break;
-            case SUBTRACT:
-                subtract(atof(ptr));
-                break;
-            case MULTIPLY:
-                multiply(atof(ptr));
-                break;
-            case DIVIDE:
-                divide(atof(ptr));
-                break;
-            case LOAD:
-                load(atof(ptr));
-                break;
-            case STORE:
-                store(atof(ptr));
-                break;
-            case JUMP:
-                jump(atof(ptr));
-                break;
-            case JUMPZERO:
-                jumpzero(atof(ptr));
-                break;
-            case PRINT:
-                print();
-                break;
-            case HALT:
-                printf("[HALT]\n");
-                return 0;
-            default:
-                return -1;
+        else if(res == RES_INVALID) {
+            printf("[Error] Invalid OPCODE occured at %d\n", pc);
+            return -1;
         }
-
-        // Increment Program Counter
-        pc++;
     }
+
+    return 0;
+}
+
+int executeLine(int *pc) {
+    // strtok用のバッファ
+    char buffer[MAX_LENGTH];
+
+    strcpy(buffer, src[*pc].str);
+    char *ptr = strtok(buffer, SEP_CHAR);
+
+    // Skip Blank Line
+    if(ptr == NULL) {
+        *pc += 1;
+        return 0;
+    }
+
+    // Get OPCODE from code string
+    OPCODE opcode_buf = convertStrToOpcode(ptr);
+    ptr = strtok(NULL, SEP_CHAR);
+
+    switch(opcode_buf) {
+        case ADD:
+            add(atof(ptr));
+            break;
+        case SUBTRACT:
+            subtract(atof(ptr));
+            break;
+        case MULTIPLY:
+            multiply(atof(ptr));
+            break;
+        case DIVIDE:
+            divide(atof(ptr));
+            break;
+        case LOAD:
+            load(atof(ptr));
+            break;
+        case STORE:
+            store(atof(ptr));
+            break;
+        case JUMP:
+            jump(pc, atof(ptr));
+            return 0;
+        case JUMPZERO:
+            jumpzero(pc, atof(ptr));
+            return 0;
+        case PRINT:
+            print();
+            break;
+        case HALT:
+            return RES_HALT;
+        default:
+            return RES_INVALID;
+    }
+
+    // Increment Program Counter
+    *pc += 1;
 
     return 0;
 }
@@ -217,19 +233,22 @@ void store(int address) {
     // printf("[%d] STORE, %d (%f)\n", pc, address, ariReg);
 }
 
-void jump(int address) {
+void jump(int *pc, int address) {
     // printf("[%d] JUMP, %d\n", pc, address);
-    
-    // pc will be increment at the end of loop
-    pc = address - 1;
+
+    // Jump to address
+    *pc = address;
 }
 
-void jumpzero(int address) {
+void jumpzero(int *pc, int address) {
     // printf("[%d] JZ, %d (%f)\n", pc, address, ariReg);
 
     if(ariReg == 0) {
-        // pc will be increment at the end of loop
-        pc = address - 1;
+        // Jump to address
+        *pc = address;
+    }
+    else {
+        *pc += 1;
     }
 }
 

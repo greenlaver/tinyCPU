@@ -20,6 +20,7 @@ typedef enum {
 } OPCODE;
 
 // Function Prototype
+int executeLine(int *pc);
 int readCode(char *path);
 OPCODE convertStrToOpcode(char *code);
 
@@ -29,6 +30,6 @@ void multiply(int address);
 void divide(int address);
 void load(int address);
 void store(int address);
-void jump(int address);
-void jumpzero(int address);
+void jump(int *pc, int address);
+void jumpzero(int *pc, int address);
 void print();
