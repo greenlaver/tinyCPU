@@ -1,7 +1,7 @@
 CC		= gcc
 CFLAGS	= -g -Wall
 PROGRAM	= tinyCPU
-OBJS	= tinyCPU.o
+OBJS	= tinyCPU.o tinyCPUcore.o
 
 .SUFFIXES: .c .o
 
