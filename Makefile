@@ -18,5 +18,6 @@ $(PROGRAM): $(OBJS)
 # dependence of header files
 tinyCPU.o: tinyCPU.h
 
+.PHONY: clean
 clean:
 	$(RM) $(PROGRAM) $(OBJS) *.h.gch
