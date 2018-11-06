@@ -3,10 +3,13 @@
 #include <string.h>
 #include "tinyCPUcore.h"
 
-int executeLine(int *pc, double *ariReg, CODE *src)
+int executeLine(int *pc, double *ariReg, char *PRINTOutStr, CODE *src)
 {
     // strtok用のバッファ
     char buffer[CODE_MAX_LENGTH];
+
+    // PRINT出力をクリア
+    strcpy(PRINTOutStr, "");
 
     strcpy(buffer, src[*pc].str);
     char *ptr = strtok(buffer, SEP_CHAR);
@@ -49,7 +52,7 @@ int executeLine(int *pc, double *ariReg, CODE *src)
         jumpzero(atof(ptr), *ariReg, pc);
         return 0;
     case PRINT:
-        print(*ariReg);
+        print(PRINTOutStr, *ariReg);
         break;
     case HALT:
         return 1;
@@ -194,7 +197,10 @@ void jumpzero(int address, double ariReg, int *pc)
     }
 }
 
-void print(double ariReg)
+void print(char *PRINTOutStr, double ariReg)
 {
-    printf("[PRINT] : %f\n", ariReg);
+    snprintf(PRINTOutStr,
+             CODE_MAX_LENGTH, "%f", ariReg);
+
+    // printf("[PRINT] : %f\n", ariReg);
 }
