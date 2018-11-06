@@ -218,9 +218,9 @@ void drawCodeList(int pc, CODE *src, int maxLine)
             }
 
             printf("%s", src[i].str);
-        }
 
-        listed_count++;
+            listed_count++;
+        }
     }
 }
 
