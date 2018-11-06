@@ -75,11 +75,26 @@ void drawFooter()
 {
     setCursorESC(1, ws.ws_row - 1);
     resetESC();
+    setBoldESC();
     setRevESC();
-    printf(" next | break [address] | run");
-    for (int i = 0; i < ws.ws_col - 29; i++)
+    printf(" COMMAND : ");
+    resetESC();
+    setRevESC();
+
+    if (ws.ws_col > 70)
     {
-        printf(" ");
+        printf("next | break [address] | run | label [address] [name] | quit");
+        for (int i = 0; i < ws.ws_col - 71; i++)
+        {
+            printf(" ");
+        }
+    }
+    else {
+        printf("n,b A,r,l A N,q");
+        for (int i = 0; i < ws.ws_col - 26; i++)
+        {
+            printf(" ");
+        }
     }
 }
 
