@@ -14,6 +14,7 @@ int drawDebugger(char *fileName, CODE *src, int maxLine,
                  int pc, int bp, float ariReg, char *PRINTOutStr,
                  char lastCmd)
 {
+    // 推奨サイズは72x30以上
     // get terminal size
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1)
     {
@@ -163,14 +164,14 @@ void drawMemoryList(CODE *src, int maxLine)
 
 void drawPC(int pc)
 {
-    setCursorESC(ws.ws_col / 2, 3);
+    setCursorESC(ws.ws_col / 2 + 2, 3);
     resetESC();
     setBoldESC();
     setUnderlineESC();
     printf("Program Counter");
 
     resetESC();
-    setCursorESC(ws.ws_col / 2 + 2, 4);
+    setCursorESC(ws.ws_col / 2 + 4, 4);
     printf("%2d", pc);
 }
 
@@ -178,14 +179,14 @@ void drawBreakpoint(int bp, int maxLine)
 {
     if (bp != -1)
     {
-        setCursorESC(ws.ws_col / 2 + 17, 3);
+        setCursorESC(ws.ws_col / 2 + 19, 3);
         resetESC();
         setBoldESC();
         setUnderlineESC();
         printf("Breakpoint");
 
         resetESC();
-        setCursorESC(ws.ws_col / 2 + +19, 4);
+        setCursorESC(ws.ws_col / 2 + +21, 4);
         printf("%2d", bp);
 
         // breakpointが有効範囲外だった場合は警告
@@ -202,7 +203,7 @@ void drawCodeList(int pc, CODE *src, int maxLine)
 {
     int listed_count = 0;
 
-    setCursorESC(ws.ws_col / 2, 6);
+    setCursorESC(ws.ws_col / 2 + 2, 6);
     resetESC();
     setBoldESC();
     setUnderlineESC();
@@ -212,7 +213,7 @@ void drawCodeList(int pc, CODE *src, int maxLine)
     for (int i = 0; i <= maxLine; i++)
     {
         resetESC();
-        setCursorESC(ws.ws_col / 2 + 2, 7 + listed_count);
+        setCursorESC(ws.ws_col / 2 + 4, 7 + listed_count);
 
         // オペコードの存在するプログラム行を出力
         if (!src[i].isNum)
