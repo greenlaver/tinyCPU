@@ -123,7 +123,7 @@ void drawMemoryList(CODE *src, int maxLine)
     setBoldESC();
     printf("Memory Area");
 
-    for (int i = 0; i < maxLine; i++)
+    for (int i = 0; i <= maxLine; i++)
     {
         // 数値のみのメモリ領域を出力
         if (src[i].isNum)
@@ -194,7 +194,7 @@ void drawCodeList(int pc, CODE *src, int maxLine)
     printf("Assembly Code");
 
     resetESC();
-    for (int i = 0; i < maxLine; i++)
+    for (int i = 0; i <= maxLine; i++)
     {
         resetESC();
         setCursorESC(ws.ws_col / 2 + 2, 7 + listed_count);
