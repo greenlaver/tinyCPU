@@ -275,6 +275,13 @@ int stepDebug(char *filePath, CODE *src, int maxLine,
             // 入力されたコマンドを区切る
             char *ptr = strtok(prompt_buf, " ");
 
+            // 半角スペースのみ入力された場合のエラー回避
+            if (ptr == NULL)
+            {
+                *lastCmd = '\0';
+                continue;
+            }
+
             // nextならステップ実行
             if (strcmp(ptr, "n") == 0 ||
                 strcmp(ptr, "next") == 0)
