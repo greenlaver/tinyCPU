@@ -311,6 +311,33 @@ int stepDebug(char *filePath, CODE *src, int maxLine,
                 }
                 continue;
             }
+            else if (strcmp(ptr, "l") == 0 ||
+                     strcmp(ptr, "label") == 0)
+            {
+                *lastCmd = 'l';
+
+                // コマンド分割
+                ptr = strtok(NULL, " ");
+                // labelを付与
+                if (ptr != NULL)
+                {
+                    int targetAddress;
+                    if (sscanf(ptr, "%d", &targetAddress) != EOF)
+                    {
+                        ptr = strtok(NULL, " ");
+                        if (ptr == NULL)
+                        {
+                            strcpy(src[targetAddress].label, "");
+                        }
+                        else
+                        {
+                            strcpy(src[targetAddress].label, ptr);
+                        }
+                    }
+                }
+
+                continue;
+            }
             // quitやexitでエミュ終了
             else if (strcmp(ptr, "q") == 0 ||
                      strcmp(ptr, "quit") == 0 ||
