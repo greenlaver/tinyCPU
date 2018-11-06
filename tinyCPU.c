@@ -279,9 +279,17 @@ int stepDebug(char *filePath, CODE *src, int maxLine,
                      strcmp(ptr, "break") == 0)
             {
                 ptr = strtok(NULL, " ");
-
-                *bp = atoi(ptr);
-                break;
+                
+                // breakの末尾に何もなければbreakpoint無効化
+                if(ptr == NULL) {
+                    *bp = -1;
+                }
+                // 変換失敗時はbreakpoint無効化
+                else if (sscanf(ptr, "%d", bp) == EOF)
+                {
+                    *bp = -1;
+                }
+                continue;
             }
             // quitやexitでエミュ終了
             else if (strcmp(ptr, "q") == 0 ||

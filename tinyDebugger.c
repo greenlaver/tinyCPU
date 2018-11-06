@@ -30,7 +30,7 @@ int drawDebugger(char *fileName, CODE *src, int maxLine,
     drawCodeList(pc, src, maxLine);
     // Body Right part
     drawPC(pc);
-    drawBreakpoint(bp);
+    drawBreakpoint(bp, maxLine);
 
     // PRINT output message
     drawPRINTOut(PRINTOutStr);
@@ -148,7 +148,7 @@ void drawPC(int pc)
     printf("%2d", pc);
 }
 
-void drawBreakpoint(int bp)
+void drawBreakpoint(int bp, int maxLine)
 {
     if (bp != -1)
     {
@@ -161,6 +161,13 @@ void drawBreakpoint(int bp)
         resetESC();
         setCursorESC(ws.ws_col / 2 + +19, 4);
         printf("%2d", bp);
+
+        // breakpointが有効範囲外だった場合は警告
+        if(bp > maxLine) {
+            printf(" ");
+            setRevESC();
+            printf("\e[31m>OUTofCODE<\e[0m");
+        }
     }
 }
 

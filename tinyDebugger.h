@@ -10,7 +10,7 @@ void drawArithReg(float ariReg);
 void drawMemoryList(CODE *src, int maxLine);
 void drawCodeList(int pc, CODE *src, int maxLine);
 void drawPC(int pc);
-void drawBreakpoint(int bp);
+void drawBreakpoint(int bp, int maxLine);
 
 // ESC character drawer
 void setCursorESC(int x, int y);
