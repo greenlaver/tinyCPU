@@ -1,11 +1,12 @@
 #include "tinyCPUcore.h"
 
 int drawDebugger(char *fileName, CODE *src, int maxLine,
-                  int pc, int bp, float ariReg, char *PRINTOutStr);
+                 int pc, int bp, float ariReg, char *PRINTOutStr,
+                 char lastCmd);
 void drawHeadBar(char *fileName);
 void drawPRINTOut(char *PRINTOutStr);
 void drawFooter();
-void drawPrompt();
+void drawPrompt(char lastCmd);
 void drawArithReg(float ariReg);
 void drawMemoryList(CODE *src, int maxLine);
 void drawCodeList(int pc, CODE *src, int maxLine);

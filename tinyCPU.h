@@ -8,4 +8,4 @@ int readCode(char *filePath, CODE *src, int *maxLine);
 int isNumericMemory(char *str, int max_length);
 int stepDebug(char *filePath, CODE *src, int maxLine,
            int pc, int ariReg, char *PRINTOutStr,
-           int *bp, int *isStepRun);
+           int *bp, int *isStepRun, char *lastCmd);

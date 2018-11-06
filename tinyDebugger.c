@@ -11,7 +11,8 @@
 struct winsize ws;
 
 int drawDebugger(char *fileName, CODE *src, int maxLine,
-                 int pc, int bp, float ariReg, char *PRINTOutStr)
+                 int pc, int bp, float ariReg, char *PRINTOutStr,
+                 char lastCmd)
 {
     // get terminal size
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1)
@@ -37,7 +38,7 @@ int drawDebugger(char *fileName, CODE *src, int maxLine,
     // Footer
     drawFooter();
     // Prompt
-    drawPrompt();
+    drawPrompt(lastCmd);
 
     return 0;
 }
@@ -82,10 +83,20 @@ void drawFooter()
     }
 }
 
-void drawPrompt()
+void drawPrompt(char lastCmd)
 {
     setCursorESC(1, ws.ws_row);
     resetESC();
+
+    if (lastCmd == '\0')
+    {
+        printf("   ");
+    }
+    else
+    {
+        printf("(%c)", lastCmd);
+    }
+
     printf(" > ");
 }
 
@@ -163,7 +174,8 @@ void drawBreakpoint(int bp, int maxLine)
         printf("%2d", bp);
 
         // breakpointが有効範囲外だった場合は警告
-        if(bp > maxLine) {
+        if (bp > maxLine)
+        {
             printf(" ");
             setRevESC();
             printf("\e[31m>OUTofCODE<\e[0m");

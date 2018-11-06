@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
     int bp = -1;
     // ステップ実行を行うかどうか
     int isStepRun = 1;
+    // 最後に実行したコマンド
+    char lastCmd = '\0';
 
     while (1)
     {
@@ -49,7 +51,7 @@ int main(int argc, char *argv[])
         {
             // デバッグモードの場合はデバッガーを1ステップ実行
             if (stepDebug(filePath, srcCode, maxLine, pc, ariReg,
-                          PRINTOutStr, &bp, &isStepRun) != 0)
+                          PRINTOutStr, &bp, &isStepRun, &lastCmd) != 0)
             {
                 return -1;
             }
@@ -218,7 +220,7 @@ int isNumericMemory(char *str, int max_length)
 
 int stepDebug(char *filePath, CODE *src, int maxLine,
               int pc, int ariReg, char *PRINTOutStr,
-              int *bp, int *isStepRun)
+              int *bp, int *isStepRun, char *lastCmd)
 {
     // ブレークポイントチェック
     if (pc == *bp)
@@ -230,7 +232,8 @@ int stepDebug(char *filePath, CODE *src, int maxLine,
     while (1)
     {
         if (drawDebugger(filePath, src, maxLine,
-                         pc, *bp, ariReg, PRINTOutStr) != 0)
+                         pc, *bp, ariReg, PRINTOutStr,
+                         *lastCmd) != 0)
         {
             printf("[Error] Could NOT get window size.\n");
             return -1;
@@ -251,10 +254,22 @@ int stepDebug(char *filePath, CODE *src, int maxLine,
             {
                 return -1;
             }
-            // 改行のみの入力だった場合は再描画して入力待ち
+            // 改行のみの入力だった場合、最後に入力したnまたはrを繰り返し
             else if (res_scanf == 0)
             {
-                continue;
+                if (*lastCmd == 'r')
+                {
+                    *isStepRun = 0;
+                    break;
+                }
+                else if (*lastCmd == 'n')
+                {
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
             }
 
             // 入力されたコマンドを区切る
@@ -264,13 +279,14 @@ int stepDebug(char *filePath, CODE *src, int maxLine,
             if (strcmp(ptr, "n") == 0 ||
                 strcmp(ptr, "next") == 0)
             {
-                *isStepRun = 1;
+                *lastCmd = 'n';
                 break;
             }
             // runならステップ実行解除
             else if (strcmp(ptr, "r") == 0 ||
                      strcmp(ptr, "run") == 0)
             {
+                *lastCmd = 'r';
                 *isStepRun = 0;
                 break;
             }
@@ -278,10 +294,14 @@ int stepDebug(char *filePath, CODE *src, int maxLine,
             else if (strcmp(ptr, "b") == 0 ||
                      strcmp(ptr, "break") == 0)
             {
+                *lastCmd = 'b';
+
+                // コマンド分割
                 ptr = strtok(NULL, " ");
-                
+
                 // breakの末尾に何もなければbreakpoint無効化
-                if(ptr == NULL) {
+                if (ptr == NULL)
+                {
                     *bp = -1;
                 }
                 // 変換失敗時はbreakpoint無効化
@@ -297,6 +317,10 @@ int stepDebug(char *filePath, CODE *src, int maxLine,
                      strcmp(ptr, "exit") == 0)
             {
                 return -1;
+            }
+            else
+            {
+                *lastCmd = '\0';
             }
         }
         // ステップ実行でなければスルー
