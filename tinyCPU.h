@@ -1,34 +1,11 @@
-// 1行あたりの最大文字数-1
-#define MAX_LENGTH  128
-// プログラムの最大行数
-#define MAX_LINE    128
-// 区切り文字
-#define SEP_CHAR    " "
+#include "tinyCPUcore.h"
 
-typedef enum {
-    ADD,
-    SUBTRACT,
-    MULTIPLY,
-    DIVIDE,
-    LOAD,
-    STORE,
-    JUMP,
-    JUMPZERO,
-    PRINT,
-    HALT,
-    ILLEGAL_OPCODE
-} OPCODE;
+#define FILEPATH_MAX_LENGTH 512
 
 // Function Prototype
-int readCode(char *path);
-OPCODE convertStrToOpcode(char *code);
-
-void add(int address);
-void subtract(int address);
-void multiply(int address);
-void divide(int address);
-void load(int address);
-void store(int address);
-void jump(int address);
-void jumpzero(int address);
-void print();
+int checkArgs(int argc, char *argv[], int *isDebug, char *filePath);
+int readCode(char *filePath, CODE *src, int *maxLine);
+int isNumericMemory(char *str, int max_length);
+int stepDebug(char *filePath, CODE *src, int maxLine,
+           int pc, int ariReg, char *PRINTOutStr,
+           int *bp, int *isStepRun, char *lastCmd);

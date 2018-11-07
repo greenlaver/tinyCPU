@@ -1,7 +1,7 @@
 CC		= gcc
-CFLAGS	= -g -Wall
+CFLAGS	= -g -Wall -std=c99
 PROGRAM	= tinyCPU
-OBJS	= tinyCPU.o
+OBJS	= tinyCPU.o tinyCPUcore.o tinyDebugger.o
 
 .SUFFIXES: .c .o
 
@@ -17,6 +17,9 @@ $(PROGRAM): $(OBJS)
 
 # dependence of header files
 tinyCPU.o: tinyCPU.h
+tinyCPUcore.o: tinyCPUcore.h
+tinyDebugger.o: tinyDebugger.h
 
+.PHONY: clean
 clean:
 	$(RM) $(PROGRAM) $(OBJS) *.h.gch
