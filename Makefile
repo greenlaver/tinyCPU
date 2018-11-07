@@ -1,5 +1,5 @@
 CC		= gcc
-CFLAGS	= -g -Wall
+CFLAGS	= -g -Wall -std=c99
 PROGRAM	= tinyCPU
 OBJS	= tinyCPU.o tinyCPUcore.o tinyDebugger.o
 
