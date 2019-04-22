@@ -82,5 +82,5 @@ Enterキーを押すと直近のコマンドを繰り返すことが可能です
 `> label [番地] [名前]` または `> l [番地] [名前]` で、指定番地のメモリ領域に名前を付けられます。
 
 ---
-This program written by [Aonori](https://twitter.com/aonr_jp)  
+This program written by [Aonori](https://twitter.com/aonrjp)  
 Thanks [なぎ@nagin](https://twitter.com/nagi_kknn)
